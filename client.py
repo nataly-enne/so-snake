@@ -14,21 +14,21 @@ from tkinter import messagebox
 from snake import snake, cube, randomSnack, redrawWindow
 
 def main():
-    HOST = '127.0.0.1'  # The server's hostname or IP address
-    PORT = 65432  # The port used by the server
+    HOST = '127.0.0.1'  # retirado de exemplos feitos em sala
+    PORT = 65432  # retirado de exemplos feitos em sala
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         width = 500
         rows = 20
         
-        cobra = snake((255, 0, 200), (10, 10))  # cria snake do cliente
+        cobra = snake((255, 0, 200), (10, 10))  # criando snake do cliente
         s.connect((HOST, PORT))
-        s.sendall(pickle.dumps(cobra))  # enviando cobra do cliente pro servidor
+        s.sendall(pickle.dumps(cobra))  # enviando dados da snake do cliente pro servidor
         data = s.recv(1024)  # recebendo dados do servidor
-        my_snake = pickle.loads(data)  # recebendo outras cobras do servidor
+        my_snake = pickle.loads(data)  # recebendo as outras snakes do servidor
 
-        s.sendall(pickle.dumps(cobra))  # enviando cobra do cliente pro servidor
-        data = s.recv(1024)  # recebendo dados do servidor
+        s.sendall(pickle.dumps(cobra))   
+        data = s.recv(1024)  
         snakes = pickle.loads(data)
 
         win = pygame.display.set_mode((width, width))
@@ -45,12 +45,12 @@ def main():
                 s.sendall(pickle.dumps(movimento))
                 movimento = None
             else:
-                s.sendall(pickle.dumps(snakes))  # enviando cobra do cliente pro servidor
+                s.sendall(pickle.dumps(snakes))  
 
             data = s.recv(4096)  # recebendo dados do servidor
             
             if data:
-                snakes = pickle.loads(data)  # recebendo outras cobras do servidor
+                snakes = pickle.loads(data)  
             else:
                 time.sleep(5)
                 continue

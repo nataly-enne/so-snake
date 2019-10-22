@@ -1,11 +1,11 @@
-
-import time
+  
 import math
+import time
 import random
 import pygame
 import tkinter as tk
 from tkinter import messagebox
-
+ 
 class cube(object):
     rows = 20
     w = 500
@@ -14,18 +14,17 @@ class cube(object):
         self.dirnx = 1
         self.dirny = 0
         self.color = color
-
-        
+       
     def move(self, dirnx, dirny):
         self.dirnx = dirnx
         self.dirny = dirny
         self.pos = (self.pos[0] + self.dirnx, self.pos[1] + self.dirny)
-
+ 
     def draw(self, surface, eyes=False):
         dis = self.w // self.rows
         i = self.pos[0]
         j = self.pos[1]
-
+ 
         pygame.draw.rect(surface, self.color, (i*dis+1,j*dis+1, dis-2, dis-2))
         if eyes:
             centre = dis//2
@@ -35,20 +34,16 @@ class cube(object):
             pygame.draw.circle(surface, (255,0,0), circleMiddle, radius)
             pygame.draw.circle(surface, (255,0,0), circleMiddle2, radius)
 
-
-
-
 class snake(object):
     def __init__(self, color, pos):
-        self.body = []
         self.turns = {}
+        self.body = []
         self.color = color
-        self.head = cube(pos,color=color)
+        self.head = cube(pos, color = color)
         self.body.append(self.head)
         self.dirnx = 0
         self.dirny = 1
-
-
+ 
     def move(self, movimento = None):
         # movimentação foi movida para o client.py
         if movimento == 'left':
@@ -70,7 +65,7 @@ class snake(object):
             self.dirnx = 0
             self.dirny = 1
             self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
-
+ 
         for i, c in enumerate(self.body):
             p = c.pos[:]
             if p in self.turns:
@@ -84,7 +79,6 @@ class snake(object):
                 elif c.dirny == 1 and c.pos[1] >= c.rows-1: c.pos = (c.pos[0], 0)
                 elif c.dirny == -1 and c.pos[1] <= 0: c.pos = (c.pos[0],c.rows-1)
                 else: c.move(c.dirnx,c.dirny)
-        
 
     def reset(self, pos):
         self.head = cube(pos)
@@ -94,31 +88,28 @@ class snake(object):
         self.dirnx = 0
         self.dirny = 1
 
-
     def addCube(self):
         tail = self.body[-1]
         dx, dy = tail.dirnx, tail.dirny
 
         if dx == 1 and dy == 0:
-            self.body.append(cube((tail.pos[0]-1,tail.pos[1])))
+            self.body.append(cube((tail.pos[0]-1,tail.pos[1]), color = self.color))
         elif dx == -1 and dy == 0:
-            self.body.append(cube((tail.pos[0]+1,tail.pos[1])))
+            self.body.append(cube((tail.pos[0]+1,tail.pos[1]), color = self.color))
         elif dx == 0 and dy == 1:
-            self.body.append(cube((tail.pos[0],tail.pos[1]-1)))
+            self.body.append(cube((tail.pos[0],tail.pos[1]-1), color = self.color))
         elif dx == 0 and dy == -1:
-            self.body.append(cube((tail.pos[0],tail.pos[1]+1)))
+            self.body.append(cube((tail.pos[0],tail.pos[1]+1), color = self.color))
 
         self.body[-1].dirnx = dx
         self.body[-1].dirny = dy
-        
 
     def draw(self, surface):
         for i, c in enumerate(self.body):
-            if i ==0:
+            if i == 0:
                 c.draw(surface, True)
             else:
                 c.draw(surface)
-
 
 def drawGrid(w, rows, surface):
     sizeBtwn = w // rows
@@ -131,7 +122,6 @@ def drawGrid(w, rows, surface):
  
         pygame.draw.line(surface, (255,255,255), (x,0),(x,w))
         pygame.draw.line(surface, (255,255,255), (0,y),(w,y))
-        
 
 def redrawWindow(surface, rows, width, snakes, snack):
     surface.fill((0,0,0))
@@ -143,11 +133,12 @@ def redrawWindow(surface, rows, width, snakes, snack):
     drawGrid(width,rows, surface)
     pygame.display.update()
 
-
 def randomSnack(rows, item):
-
     positions = []
-
+    for i in item:
+        if i != 'snacks':
+            positions += item[i].body
+ 
     while True:
         x = random.randrange(rows)
         y = random.randrange(rows)
@@ -155,9 +146,8 @@ def randomSnack(rows, item):
             continue
         else:
             break
-        
+       
     return (x,y)
-
 
 def message_box(subject, content):
     root = tk.Tk()
