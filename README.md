@@ -1,6 +1,13 @@
 # Snake
 Conceitos de gerenciamento de IO e networking IO em uma aplicação com interface gráfica.
 
+# What is it?
+A aplicação a ser desenvolvida foi batizada de PySnakes (em homenagem ao jogo da cobrinha), pois nesse caso, teremos múltiplas
+snakes em um mesmo tabuleiro. No jogo, múltiplas snakes podem estar no mesmo ao mesmo tempo.
+
+### Cenário 1 – I/O programada
+O cenário implementado foi o de I/O programada. Nesse cenário o servidor deve configurar os sockets de forma não bloqueante e deve tratar todas as entradas, saídas e processamento em uma thread única.
+
 #### Para compilar o programa, vá ao diretorio do arquivo e em um terminal execute o `server.py`
 ```bash
  python3 server.py 
